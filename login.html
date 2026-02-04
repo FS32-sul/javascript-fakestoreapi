@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="logar(event)">
+        <input id="usuario" type="text" placeholder="Digite seu usuário" required>
+        <input id="senha" type="password" placeholder="********" required>
+        <button>Logar</button>
+    </form>
+    <script>
+
+        async function logar(event){
+            event.preventDefault();
+            let usuario = document.querySelector("#usuario").value;
+            let senha = document.querySelector("#senha").value;
+            
+            const request = await fetch("https://fakestoreapi.com/auth/login", {
+                method: "post",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: usuario,
+                    password: senha 
+                })
+            })
+
+            if(!request.ok){
+                alert("Usuário ou senha inválido");
+                return;
+            }
+
+            const response = await request.json();
+
+            if(response.token){
+                sessionStorage.setItem("token", response.token);
+                window.location.href = "area-logada.html";
+            }
+        }
+
+    </script>
+</body>
+</html>
